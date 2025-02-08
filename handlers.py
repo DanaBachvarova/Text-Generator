@@ -32,7 +32,11 @@ def handle_upload(uploaded_file: Optional[str]):
         new_corpus_path = os.path.join(CORPUS_DIR, filename)
         os.rename(uploaded_file, new_corpus_path)
         return f"Файлът '{filename}' беше качен успешно!", list_corpora()
-    except Exception as e:
+    except FileNotFoundError:
+        return "Грешка: Файлът не беше намерен.", list_corpora()
+    except PermissionError:
+        return "Грешка: Нямате разрешение за преместване на файла.", list_corpora()
+    except OSError as e:
         return f"Грешка при обработка на файла: {e}", list_corpora()
 
 def generate_text(corpus_name: str, uploaded_file: Optional[str], sentences: int) -> str:
@@ -49,8 +53,6 @@ def generate_text(corpus_name: str, uploaded_file: Optional[str], sentences: int
     '''
     if corpus_name != "(Качи нов файл)":
         corpus_text = get_corpus_text(corpus_name)
-        if not corpus_text:
-            return "Грешка: Избраният корпус не съществува."
     elif uploaded_file:
         try:
             with open(uploaded_file, "r", encoding="utf-8") as f:
@@ -58,8 +60,12 @@ def generate_text(corpus_name: str, uploaded_file: Optional[str], sentences: int
             filename = os.path.basename(uploaded_file)
             new_corpus_path = os.path.join(CORPUS_DIR, filename)
             os.rename(uploaded_file, new_corpus_path)
-        except Exception as e:
-            return f"Грешка при обработка на файла: {e}"
+        except FileNotFoundError:
+            return "Грешка: Файлът не беше намерен."
+        except UnicodeDecodeError:
+            return "Грешка: Невалиден формат на файла."
+        except IOError as e:
+            return f"Грешка при отваряне на файла: {e}"
     else:
         return "Моля, изберете корпус или качете нов файл."
 
@@ -80,9 +86,6 @@ def generate_text_with_word(corpus_name: str, uploaded_file: Optional[str],
     Returns:
     str: The generated text containing the specified word or an error message.
     '''
-    if not word.strip():
-        return "Грешка: Моля, въведете дума за търсене."
-
     if corpus_name != "(Качи нов файл)":
         corpus_text = get_corpus_text(corpus_name)
         if not corpus_text:
@@ -94,8 +97,12 @@ def generate_text_with_word(corpus_name: str, uploaded_file: Optional[str],
             filename = os.path.basename(uploaded_file)
             new_corpus_path = os.path.join(CORPUS_DIR, filename)
             os.rename(uploaded_file, new_corpus_path)
-        except Exception as e:
-            return f"Грешка при обработка на файла: {e}"
+        except FileNotFoundError:
+            return "Грешка: Файлът не беше намерен."
+        except UnicodeDecodeError:
+            return "Грешка: Невалиден формат на файла."
+        except IOError as e:
+            return f"Грешка при отваряне на файла: {e}"
     else:
         return "Моля, изберете корпус или качете нов файл."
 
