@@ -67,10 +67,6 @@ def save_generated_text(text: str, filename: Optional[str]) -> str:
     
     return f"Текстът е запазен като {filename}"
 
-def list_files() -> str:
-    files = storage.list_saved_files()
-    return "\n".join(files) if files else "Няма запазени файлове."
-
 def open_file(filename: str) -> str:
     try:
         with open(os.path.join(GENERATED_DIR, filename), "r", encoding="utf-8") as file:

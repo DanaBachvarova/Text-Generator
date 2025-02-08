@@ -3,7 +3,8 @@ import text_generator
 import storage
 import os
 from typing import List, Optional
-from handlers import list_corpora, handle_upload, generate_text, generate_text_combined, save_generated_text, list_files, open_file, delete_file, generate_text_with_word
+from handlers import list_corpora, handle_upload, generate_text, generate_text_combined, save_generated_text, open_file, delete_file, generate_text_with_word
+from storage import list_saved_files
 
 with gr.Blocks() as app:
     gr.Markdown("## Генератор на текстове с Markov Chain")
@@ -28,7 +29,7 @@ with gr.Blocks() as app:
     
     list_files_button = gr.Button("Преглед на запазени файлове")
     saved_files_output = gr.Textbox(label="Запазени файлове", interactive=False)
-    list_files_button.click(list_files, outputs=saved_files_output)
+    list_files_button.click(list_saved_files, outputs=saved_files_output)
 
     with gr.Row():
         file_to_open = gr.Textbox(label="Име на файла за отваряне")

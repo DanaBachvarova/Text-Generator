@@ -20,5 +20,6 @@ def load_texts(filename="generated_texts.json"):
     except (FileNotFoundError, json.JSONDecodeError):
         return []
     
-def list_saved_files():
-    return [f for f in os.listdir("generated_texts") if f.endswith(".txt")]
+def list_saved_files() -> str:
+    files = [f for f in os.listdir("generated_texts") if f.endswith(".txt")]
+    return "\n".join(files) if files else "Няма запазени файлове."

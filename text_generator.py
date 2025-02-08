@@ -1,10 +1,6 @@
 import markovify
 from typing import Optional
 
-def load_corpus(filepath: str) -> str:
-    with open(filepath, "r", encoding="utf-8") as file:
-        return file.read()
-
 def generate_text(corpus: str, sentences: int) -> str:
     model = markovify.Text(corpus, state_size=2)
     generated_sentences = []
