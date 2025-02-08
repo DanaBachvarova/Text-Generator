@@ -1,7 +1,11 @@
+'''
+Module for handling file uploads, text generation, and corpus management.
+Includes functionality for uploading files, generating text from a corpus,
+and generating text with specific words from a given corpus.
+'''
 import os
+from typing import Optional
 import text_generator
-import storage
-from typing import List, Optional
 from storage import get_corpus_text, list_corpora
 
 CORPUS_DIR = "corpora"
@@ -11,9 +15,18 @@ os.makedirs(CORPUS_DIR, exist_ok=True)
 os.makedirs(GENERATED_DIR, exist_ok=True)
 
 def handle_upload(uploaded_file: Optional[str]):
+    '''
+    Handles file upload and moves the uploaded file to the corpus directory.
+
+    Parameters:
+    uploaded_file (str, optional): Path of the uploaded file.
+
+    Returns:
+    tuple: A message indicating success or failure and the updated list of corpora.
+    '''
     if not uploaded_file:
         return "Грешка: Няма качен файл.", list_corpora()
-    
+
     try:
         filename = os.path.basename(uploaded_file)
         new_corpus_path = os.path.join(CORPUS_DIR, filename)
@@ -23,6 +36,17 @@ def handle_upload(uploaded_file: Optional[str]):
         return f"Грешка при обработка на файла: {e}", list_corpora()
 
 def generate_text(corpus_name: str, uploaded_file: Optional[str], sentences: int) -> str:
+    '''
+    Generates text based on a selected corpus or an uploaded file.
+
+    Parameters:
+    corpus_name (str): The name of the selected corpus.
+    uploaded_file (str, optional): The path to the uploaded file.
+    sentences (int): The number of sentences to generate.
+
+    Returns:
+    str: The generated text or an error message.
+    '''
     if corpus_name != "(Качи нов файл)":
         corpus_text = get_corpus_text(corpus_name)
         if not corpus_text:
@@ -40,8 +64,22 @@ def generate_text(corpus_name: str, uploaded_file: Optional[str], sentences: int
         return "Моля, изберете корпус или качете нов файл."
 
     return text_generator.generate_text(corpus_text, int(sentences))
-    
-def generate_text_with_word(corpus_name: str, uploaded_file: Optional[str], word: str, sentences: int) -> str:
+
+def generate_text_with_word(corpus_name: str, uploaded_file: Optional[str],
+                            word: str, sentences: int) -> str:
+    '''
+    Generates text based on a selected corpus or an uploaded file, 
+    ensuring the presence of a specific word.
+
+    Parameters:
+    corpus_name (str): The name of the selected corpus.
+    uploaded_file (str, optional): The path to the uploaded file.
+    word (str): The word that must be present in the generated sentences.
+    sentences (int): The number of sentences to generate.
+
+    Returns:
+    str: The generated text containing the specified word or an error message.
+    '''
     if not word.strip():
         return "Грешка: Моля, въведете дума за търсене."
 
@@ -64,6 +102,19 @@ def generate_text_with_word(corpus_name: str, uploaded_file: Optional[str], word
     return text_generator.generate_text_with_word(corpus_text, word, sentences)
 
 def generate_text_combined(corpus: str, file, word: str, num_sentences: int) -> str:
+    '''
+    Combines text generation with or without a specific word, 
+    based on the corpus and user input.
+
+    Parameters:
+    corpus (str): The name of the selected corpus.
+    file (str, optional): The path to the uploaded file.
+    word (str): The word that may be present in the generated sentences.
+    num_sentences (int): The number of sentences to generate.
+
+    Returns:
+    str: The generated text, either with or without the specified word.
+    '''
     word = str(word) if word is not None else ""
     if not word.strip():
         return generate_text(corpus, file, num_sentences)
