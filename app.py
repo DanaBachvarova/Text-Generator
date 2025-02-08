@@ -3,7 +3,7 @@ import text_generator
 import storage
 import os
 from typing import List, Optional
-from handlers import list_corpora, handle_upload, generate_text, save_generated_text, list_files, open_file, delete_file
+from handlers import list_corpora, handle_upload, generate_text, generate_text_combined, save_generated_text, list_files, open_file, delete_file, generate_text_with_word
 
 with gr.Blocks() as app:
     gr.Markdown("## Генератор на текстове с Markov Chain")
@@ -13,9 +13,11 @@ with gr.Blocks() as app:
         file_input = gr.File(label="Качете нов файл")
         num_sentences = gr.Slider(minimum=1, maximum=10, value=5, step=1, label="Брой изречения")
     
+    word_input = gr.Textbox(label="Конкретна дума (по избор)")
+
     generate_button = gr.Button("Генерирай текст")
     output_text = gr.Textbox(label="Генериран текст")
-    generate_button.click(generate_text, inputs=[corpus_dropdown, file_input, num_sentences], outputs=output_text)
+    generate_button.click(generate_text_combined, inputs=[corpus_dropdown, file_input, word_input, num_sentences], outputs=output_text)
     
     with gr.Row():
         filename_input = gr.Textbox(label="Име на файла (по избор)")
