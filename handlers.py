@@ -14,31 +14,6 @@ GENERATED_DIR = "generated_texts"
 os.makedirs(CORPUS_DIR, exist_ok=True)
 os.makedirs(GENERATED_DIR, exist_ok=True)
 
-def handle_upload(uploaded_file: Optional[str]):
-    '''
-    Handles file upload and moves the uploaded file to the corpus directory.
-
-    Parameters:
-    uploaded_file (str, optional): Path of the uploaded file.
-
-    Returns:
-    tuple: A message indicating success or failure and the updated list of corpora.
-    '''
-    if not uploaded_file:
-        return "Грешка: Няма качен файл.", list_corpora()
-
-    try:
-        filename = os.path.basename(uploaded_file)
-        new_corpus_path = os.path.join(CORPUS_DIR, filename)
-        os.rename(uploaded_file, new_corpus_path)
-        return f"Файлът '{filename}' беше качен успешно!", list_corpora()
-    except FileNotFoundError:
-        return "Грешка: Файлът не беше намерен.", list_corpora()
-    except PermissionError:
-        return "Грешка: Нямате разрешение за преместване на файла.", list_corpora()
-    except OSError as e:
-        return f"Грешка при обработка на файла: {e}", list_corpora()
-
 def generate_text(corpus_name: str, uploaded_file: Optional[str], sentences: int) -> str:
     '''
     Generates text based on a selected corpus or an uploaded file.
