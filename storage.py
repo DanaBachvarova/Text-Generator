@@ -65,6 +65,9 @@ def list_saved_files() -> str:
     files = [f for f in os.listdir("generated_texts") if f.endswith(".txt")]
     return "\n".join(files) if files else "Няма запазени файлове."
 
+def list_saved_files_dropdown() -> List[str]:
+    return [f for f in os.listdir("generated_texts") if f.endswith(".txt")]
+
 def list_corpora() -> List[str]:
     '''
     Lists the names of all available corpora files (without the .txt extension).
