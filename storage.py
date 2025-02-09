@@ -66,6 +66,12 @@ def list_saved_files() -> str:
     return "\n".join(files) if files else "Няма запазени файлове."
 
 def list_saved_files_dropdown() -> List[str]:
+    '''
+    Returns a list of saved text files in the "generated_texts" directory.
+
+    Returns:
+    List[str]: A list of filenames ending with ".txt".
+    '''
     return [f for f in os.listdir("generated_texts") if f.endswith(".txt")]
 
 def list_corpora() -> List[str]:

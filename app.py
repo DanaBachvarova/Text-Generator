@@ -36,14 +36,16 @@ with gr.Blocks() as app:
     list_files_button.click(list_saved_files, outputs=saved_files_output)
 
     with gr.Row():
-        file_to_open = gr.Dropdown(choices=list_saved_files_dropdown(), label="Име на файла за отваряне")
+        file_to_open = gr.Dropdown(choices=list_saved_files_dropdown(),
+                                   label="Име на файла за отваряне")
         open_file_button = gr.Button("Отвори файл")
 
     opened_file_content = gr.Textbox(label="Съдържание на файла", interactive=False)
     open_file_button.click(open_file, inputs=file_to_open, outputs=opened_file_content)
 
     with gr.Row():
-        file_to_delete = gr.Dropdown(choices=list_saved_files_dropdown(), label="Име на файла за изтриване")
+        file_to_delete = gr.Dropdown(choices=list_saved_files_dropdown(),
+                                     label="Име на файла за изтриване")
         delete_file_button = gr.Button("Изтрий файл")
 
     delete_status = gr.Textbox(label="Статус на изтриване", interactive=False)
