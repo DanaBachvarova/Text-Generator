@@ -4,7 +4,13 @@ Provides functionality to generate text, save files, open and delete files
 '''
 import gradio as gr
 from handlers import generate_text_combined
-from storage import list_saved_files, save_generated_text, list_corpora, list_saved_files_dropdown
+from storage import (
+    list_saved_files,
+    save_generated_text,
+    list_corpora,
+    list_saved_files_dropdown,
+    get_files_by_author
+)
 from file_manager import open_file, delete_file
 
 with gr.Blocks() as app:
@@ -28,7 +34,7 @@ with gr.Blocks() as app:
         save_button = gr.Button("Запази текста")
 
     save_status = gr.Textbox(label="Статус на запазване", interactive=False)
-    save_button.click(save_generated_text, inputs=[output_text, filename_input],
+    save_button.click(save_generated_text, inputs=[output_text, filename_input, corpus_dropdown],
                       outputs=save_status)
 
     list_files_button = gr.Button("Преглед на запазени файлове")
@@ -50,5 +56,12 @@ with gr.Blocks() as app:
 
     delete_status = gr.Textbox(label="Статус на изтриване", interactive=False)
     delete_file_button.click(delete_file, inputs=file_to_delete, outputs=delete_status)
+
+    gr.Markdown("### Файлове по автор")
+    author_dropdown = gr.Dropdown(choices=list_corpora()[1:], label="Избери автор")
+    author_files_output = gr.Textbox(label="Файлове на автора", interactive=False)
+    show_author_files_button = gr.Button("Покажи файловете")
+    show_author_files_button.click(get_files_by_author,
+                                   inputs=author_dropdown, outputs=author_files_output)
 
 app.launch()
