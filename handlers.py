@@ -6,7 +6,7 @@ and generating text with specific words from a given corpus.
 import os
 from typing import Optional
 import text_generator
-from storage import get_corpus_text, list_corpora
+from storage import get_corpus_text
 
 CORPUS_DIR = "corpora"
 GENERATED_DIR = "generated_texts"
